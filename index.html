@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sam Struthers — Data Science &amp; AI</title>
+  <meta name="description" content="Sam Struthers — MSc Data Science & AI student at TU/e. Information retrieval, process mining, learning systems, and functional 3D design.">
+  <meta property="og:title" content="Sam Struthers — Data Science & AI">
+  <meta property="og:description" content="MSc Data Science & AI at TU/e. Interested in how learning systems work under the hood, and in building things.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://s4mstruthers.github.io/">
+  <meta property="og:image" content="https://s4mstruthers.github.io/headshot.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f2236'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%235ec4c0'%3ESS%3C/text%3E%3C/svg%3E">
+
+  <!-- Fonts: a serif for headings, a clean sans for body text, a mono for small labels -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---------- Colour tokens (light) ---------- */
+    :root {
+      --bg: #f6f5f1;
+      --surface: #ffffff;
+      --ink: #0f1b2a;
+      --muted: #566170;
+      --line: #e3e1da;
+      --accent: #0e6f6b;
+      --accent-soft: #e2f1ef;
+      --hero-ring: #0f2236;
+      --serif: "Newsreader", Georgia, serif;
+      --sans: "Inter", system-ui, -apple-system, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    }
+    /* ---------- Colour tokens (dark, follows the visitor's system setting) ---------- */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0b1220;
+        --surface: #111a2b;
+        --ink: #e7ebf0;
+        --muted: #9aa6b5;
+        --line: #1f2a3d;
+        --accent: #5ec4c0;
+        --accent-soft: #12302f;
+        --hero-ring: #5ec4c0;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0b1220; --surface: #111a2b; --ink: #e7ebf0; --muted: #9aa6b5;
+      --line: #1f2a3d; --accent: #5ec4c0; --accent-soft: #12302f; --hero-ring: #5ec4c0;
+    }
+
+    /* ---------- Base ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 400 17px/1.65 var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+    @media (max-width: 600px) { .wrap { padding: 0 16px; } }
+
+    /* ---------- Top navigation ---------- */
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .brand { font-family: var(--serif); font-size: 1.25rem; text-decoration: none; }
+    nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
+    nav ul a { text-decoration: none; font-size: .9rem; color: var(--muted); }
+    nav ul a:hover { color: var(--ink); }
+    @media (max-width: 680px) { nav ul { display: none; } }
+
+    /* ---------- Hero ---------- */
+    .hero { padding-top: 88px; padding-bottom: 72px; display: grid; grid-template-columns: 1fr 300px; gap: 64px; align-items: center; }
+    .eyebrow { font: 500 .78rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+    h1 { font: 400 clamp(2.8rem, 7vw, 4.6rem)/1.02 var(--serif); letter-spacing: -.02em; margin: 18px 0 22px; }
+    .lead { font: 400 1.32rem/1.5 var(--serif); color: var(--muted); max-width: 34ch; margin: 0 0 32px; }
+    .lead em { color: var(--ink); }
+    .links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border-radius: 999px;
+      border: 1px solid var(--line); background: var(--surface);
+      text-decoration: none; font-size: .9rem; font-weight: 500;
+      transition: border-color .15s, transform .15s;
+    }
+    .btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .btn svg { width: 16px; height: 16px; }
+    .portrait { position: relative; }
+    .portrait img {
+      width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block;
+      border-radius: 28px;
+      box-shadow: 0 30px 60px -30px rgba(15, 34, 54, .55);
+    }
+    .portrait::after {   /* offset outline behind the photo */
+      content: ""; position: absolute; inset: 14px -14px -14px 14px;
+      border: 1.5px solid var(--hero-ring); border-radius: 28px; z-index: -1; opacity: .35;
+    }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; gap: 40px; padding-top: 48px; padding-bottom: 48px; }
+      .portrait { order: -1; width: 180px; }
+    }
+
+    /* ---------- Sections ---------- */
+    section { padding: 72px 0; border-top: 1px solid var(--line); }
+    .sec-head { display: grid; grid-template-columns: 200px 1fr; gap: 32px; }
+    .sec-label { font: 500 .78rem/1.8 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    h2 { font: 400 2.1rem/1.15 var(--serif); letter-spacing: -.01em; margin: 0 0 20px; }
+    h3 { font: 500 1.15rem/1.3 var(--sans); margin: 0; }
+    p { margin: 0 0 16px; }
+    @media (max-width: 760px) { .sec-head { grid-template-columns: 1fr; gap: 8px; } }
+
+    .about p { max-width: 62ch; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .tag { font: 400 .78rem/1 var(--mono); padding: 7px 10px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); }
+
+    /* ---------- Featured thesis card ---------- */
+    .feature {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+      padding: 36px; display: grid; grid-template-columns: 1fr; gap: 28px;
+    }
+    .feature .meta { font: 400 .8rem/1.6 var(--mono); color: var(--muted); margin-bottom: 14px; }
+    .formula {
+      background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+      font: 400 .82rem/1.75 var(--mono); color: var(--muted); align-self: start; overflow-x: auto;
+    }
+    .formula b { color: var(--accent); font-weight: 500; }
+    .formula .eq { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--ink); font-size: .9rem; }
+    .formula .frac { display: inline-flex; flex-direction: column; text-align: center; }
+    .formula .frac span:first-child { border-bottom: 1px solid var(--muted); padding: 0 6px 3px; }
+    .formula .frac span:last-child { padding: 3px 6px 0; }
+    .formula .cap { display: block; margin-top: 12px; font-family: var(--sans); font-size: .82rem; }
+    @media (max-width: 760px) { .feature { grid-template-columns: 1fr; padding: 24px; } }
+
+    /* ---------- Project cards ---------- */
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+      padding: 26px; display: flex; flex-direction: column; gap: 12px;
+      text-decoration: none; transition: border-color .15s, transform .15s;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .card p { color: var(--muted); font-size: .95rem; margin: 0; flex: 1; }
+    .card .stack { font: 400 .75rem/1.5 var(--mono); color: var(--accent); }
+    .card .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .arrow { color: var(--muted); transition: transform .15s; }
+    .card:hover .arrow { transform: translate(3px, -3px); color: var(--accent); }
+    .small-list { margin-top: 18px; display: grid; gap: 0; }
+    .small-list a {
+      display: flex; justify-content: space-between; gap: 16px; padding: 14px 0;
+      border-bottom: 1px dashed var(--line); text-decoration: none; font-size: .95rem;
+    }
+    @media (max-width: 600px) { .small-list a { flex-direction: column; gap: 2px; } }
+    .small-list span { color: var(--muted); }
+
+    /* ---------- 3D design section ---------- */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 8px 0 28px; }
+    .stat { border-left: 2px solid var(--accent); padding: 4px 0 4px 16px; }
+    .stat b { display: block; font: 400 2.4rem/1 var(--serif); }
+    .stat span { font-size: .85rem; color: var(--muted); }
+    .models { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    @media (max-width: 760px) { .models { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(3, 1fr); gap: 10px; } .stat b { font-size: 1.8rem; } }
+    .model { padding: 20px; }
+    .model h3 { font-size: 1rem; }
+    .model .dl { font: 400 .75rem/1 var(--mono); color: var(--muted); }
+
+    /* ---------- Timeline (education & teaching) ---------- */
+    .timeline { display: grid; gap: 0; }
+    .tl { display: grid; grid-template-columns: 140px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .tl:last-child { border-bottom: 0; }
+    .tl .when { font: 400 .8rem/1.6 var(--mono); color: var(--muted); }
+    .tl p { color: var(--muted); font-size: .95rem; margin: 4px 0 0; }
+    @media (max-width: 600px) { .tl { grid-template-columns: 1fr; gap: 4px; } }
+
+    /* ---------- Contact / footer ---------- */
+    .contact h2 { font-size: clamp(2rem, 5vw, 3rem); max-width: 18ch; }
+    footer { padding: 32px 0 48px; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav>
+    <div class="wrap">
+      <a class="brand" href="#top">Sam Struthers</a>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#making">3D design</a></li>
+        <li><a href="#education">Education</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- ===== Hero ===== -->
+    <header class="wrap hero">
+      <div>
+        <div class="eyebrow">MSc Data Science &amp; AI · TU/e</div>
+        <h1>Sam Struthers</h1>
+        <p class="lead">I want to understand <em>how a set of formulas can learn</em>, and then act on the world.</p>
+        <div class="links">
+          <a class="btn primary" href="https://github.com/s4mstruthers" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+            GitHub
+          </a>
+          <a class="btn" href="https://www.linkedin.com/in/sam-struthers-2862201b4/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+            LinkedIn
+          </a>
+          <a class="btn" href="https://makerworld.com/en/@Sams3DSolutions" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Z"/><path d="m3 7 9 5 9-5M12 12v10"/></svg>
+            MakerWorld
+          </a>
+          <!-- Optional: uncomment once you've uploaded cv.pdf to the repo -->
+          <!-- <a class="btn" href="cv.pdf" target="_blank">CV (PDF)</a> -->
+        </div>
+      </div>
+      <div class="portrait">
+        <img src="headshot.jpg" alt="Portrait of Sam Struthers" width="800" height="800">
+      </div>
+    </header>
+
+    <!-- ===== About ===== -->
+    <section id="about" class="about">
+      <div class="wrap sec-head">
+        <div class="sec-label">About</div>
+        <div>
+          <h2>Understanding the methods, not just applying them.</h2>
+          <p>I took an online course on Q-learning at 14. The idea that a set of formulas could produce something that learns, and then acts on the world, is what pulled me into the field. I wanted to understand <em>why</em> it worked.</p>
+          <p>That led to a BSc in Computing Science at Radboud University (Data Science and Software Science specialisation, AI minor), where I also worked as a teaching assistant on four courses. I'm now at TU/e Eindhoven for an MSc in Data Science &amp; AI.</p>
+          <p>Outside coursework I design and publish functional 3D-printed parts. It's the same instinct pointed at physical objects: find a real problem, then build the thing that solves it. Longer term, the overlap between AI and physical engineering is where I'd most like to work.</p>
+          <div class="tags">
+            <span class="tag">Machine learning</span>
+            <span class="tag">Reinforcement learning</span>
+            <span class="tag">Information retrieval</span>
+            <span class="tag">Process mining</span>
+            <span class="tag">Python</span>
+            <span class="tag">SQL · DuckDB</span>
+            <span class="tag">C</span>
+            <span class="tag">Fusion 360</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Research / thesis ===== -->
+    <section id="research">
+      <div class="wrap sec-head">
+        <div class="sec-label">Research</div>
+        <div>
+          <h2>Bachelor's thesis</h2>
+          <div class="feature">
+            <div>
+              <div class="meta">Radboud University · 2026 · Supervised by prof. dr. ir. Arjen de Vries</div>
+              <h3>Dynamic full-text indexing on lakehouse storage</h3>
+              <p style="margin-top:12px;color:var(--muted)">A full-text search index built on DuckDB and the DuckLake lakehouse format, with BM25 ranking executed entirely in SQL. Documents can be inserted, deleted and modified without re-indexing the corpus, and every change is an ACID transaction.</p>
+              <p style="color:var(--muted)">The thesis evaluates how DuckLake's merge-on-read strategy behaves under deletion-heavy workloads: query latency as delete files accumulate, and what maintenance costs to restore it. The aim was engineering groundwork for retrieval in AI systems at scale.</p>
+              <div class="links" style="margin-top:20px">
+                <a class="btn primary" href="https://github.com/s4mstruthers/dynamic-index-ducklake" target="_blank" rel="noopener">Code &amp; thesis PDF →</a>
+              </div>
+            </div>
+            <div class="formula" aria-label="BM25 scoring formula">
+              <div class="eq">
+                <b>score</b>(D,Q) = <span class="sum">Σ<sub>t∈Q</sub></span> IDF(t) ·
+                <span class="frac"><span>f(t,D) · (k₁+1)</span><span>f(t,D) + k₁ · (1 − b + b · |D| / avgdl)</span></span>
+              </div>
+              <div style="margin-top:14px">k₁ = 1.2 &nbsp;·&nbsp; b = 0.75</div>
+              <span class="cap">BM25, computed as vectorised SQL over <code>dict</code>, <code>docs</code> and <code>postings</code> tables stored as Parquet.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Software projects ===== -->
+    <section id="projects">
+      <div class="wrap sec-head">
+        <div class="sec-label">Projects</div>
+        <div>
+          <h2>Software</h2>
+          <div class="grid">
+            <a class="card" href="https://github.com/s4mstruthers/CPNpy" target="_blank" rel="noopener">
+              <div class="row"><h3>CPNpy</h3><span class="arrow">↗</span></div>
+              <p>A desktop app for process mining and (coloured) Petri nets. Draw workflow nets and check soundness, discover models from event logs (α, Inductive and Heuristics Miner), run conformance checking, and simulate CPN Tools models. Built because CPN Tools is Windows-only; this runs natively on macOS, Windows and Linux with no Java.</p>
+              <div class="stack">Python · PySide6 (Qt) · CPN ML interpreter</div>
+            </a>
+            <a class="card" href="https://github.com/s4mstruthers/Lucidfish" target="_blank" rel="noopener">
+              <div class="row"><h3>Lucidfish</h3><span class="arrow">↗</span></div>
+              <p>A chess coach that turns Stockfish lines into human strategic reasoning. Tactical and positional facts (pins, forks, threats) are extracted from the board first, then given to an LLM, and the commentary is fact-checked against the position before it is shown.</p>
+              <div class="stack">Python · FastAPI · Stockfish · Ollama / LLM APIs · SQLite</div>
+            </a>
+          </div>
+          <div class="small-list">
+            <a href="https://github.com/s4mstruthers/ObsidianVaultToTempora" target="_blank" rel="noopener">ObsidianVaultToTempora <span>Converts an Obsidian vault to portable Markdown · Python ↗</span></a>
+            <a href="https://github.com/s4mstruthers/AudiobookTTS" target="_blank" rel="noopener">AudiobookTTS <span>EPUB to audiobook with text-to-speech · Python ↗</span></a>
+            <a href="https://github.com/s4mstruthers?tab=repositories" target="_blank" rel="noopener">All repositories <span>github.com/s4mstruthers ↗</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 3D design ===== -->
+    <section id="making">
+      <div class="wrap sec-head">
+        <div class="sec-label">3D design</div>
+        <div>
+          <h2>Sams3DSolutions</h2>
+          <p style="max-width:60ch;color:var(--muted)">Functional parts designed in Fusion 360 and printed on a Bambu Lab P1S, then published openly on MakerWorld. Each one starts from a small, real annoyance.</p>
+          <div class="stats">
+            <div class="stat"><b>14</b><span>published models</span></div>
+            <div class="stat"><b>1.9k+</b><span>downloads</span></div>
+            <div class="stat"><b>1.3k+</b><span>prints by others</span></div>
+          </div>
+          <div class="models">
+            <a class="card model" href="https://makerworld.com/en/models/2718844-thread-cone-adapter-for-sewing-machines-25g" target="_blank" rel="noopener">
+              <h3>Thread cone adapter</h3>
+              <p>Lets domestic sewing machines take industrial thread cones. Tested on Pfaff, Juki and Brother machines.</p>
+              <span class="dl">248 downloads</span>
+            </a>
+            <a class="card model" href="https://makerworld.com/en/models/2817994-bobbinest-parametric-bobbin-organiser" target="_blank" rel="noopener">
+              <h3>BobbiNest</h3>
+              <p>A parametric bobbin organiser, with a flexible TPU variant.</p>
+              <span class="dl">99 downloads</span>
+            </a>
+            <a class="card model" href="https://makerworld.com/en/models/835928-sandisk-extreme-pro-v2-cable-organizer-updated" target="_blank" rel="noopener">
+              <h3>SanDisk SSD cable organiser</h3>
+              <p>A cable organiser for the SanDisk Extreme Pro v2 portable SSD.</p>
+              <span class="dl">614 downloads</span>
+            </a>
+            <a class="card model" href="https://makerworld.com/en/models/1428257-giant-contact-forward-saddle-pad-tpu" target="_blank" rel="noopener">
+              <h3>TPU saddle pad</h3>
+              <p>A flexible TPU pad for the GIANT Contact Forward bike saddle.</p>
+              <span class="dl">418 downloads</span>
+            </a>
+            <a class="card model" href="https://makerworld.com/en/models/611960-philips-one-blade-simple-stick-on-wall-mount" target="_blank" rel="noopener">
+              <h3>OneBlade wall mount</h3>
+              <p>A stick-on wall mount for the Philips OneBlade, now on version 2.</p>
+              <span class="dl">280+ downloads</span>
+            </a>
+            <a class="card model" href="https://makerworld.com/en/models/2772104-universal-ergonomic-foot-rest-riser" target="_blank" rel="noopener">
+              <h3>Ergonomic footrest</h3>
+              <p>A 15° under-desk footrest built from two independent wedge frames.</p>
+              <span class="dl">42 downloads</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Education & teaching ===== -->
+    <section id="education">
+      <div class="wrap sec-head">
+        <div class="sec-label">Education</div>
+        <div>
+          <h2>Education &amp; teaching</h2>
+          <div class="timeline">
+            <div class="tl">
+              <div class="when">2026 – present</div>
+              <div>
+                <h3>MSc Data Science &amp; Artificial Intelligence</h3>
+                <p>Eindhoven University of Technology (TU/e). Current courses include process mining, survival analysis, and a research track in safe reinforcement learning.</p>
+              </div>
+            </div>
+            <div class="tl">
+              <div class="when">– 2026</div>
+              <div>
+                <h3>BSc Computing Science</h3>
+                <p>Radboud University, Nijmegen. Data Science and Software Science specialisation, minor in AI. Thesis on dynamic full-text indexing with DuckLake.</p>
+              </div>
+            </div>
+            <div class="tl">
+              <div class="when">During BSc</div>
+              <div>
+                <h3>Teaching assistant</h3>
+                <p>Radboud University. TA for four courses, including some outside my specialisation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Contact ===== -->
+    <section class="contact">
+      <div class="wrap sec-head">
+        <div class="sec-label">Contact</div>
+        <div>
+          <h2>Interested in AI that meets the physical world? Let's talk.</h2>
+          <div class="links">
+            <a class="btn primary" href="https://www.linkedin.com/in/sam-struthers-2862201b4/" target="_blank" rel="noopener">Message me on LinkedIn</a>
+            <!-- Optional: add a public email address -->
+            <!-- <a class="btn" href="mailto:you@example.com">Email</a> -->
+            <a class="btn" href="https://github.com/s4mstruthers" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Sam Struthers</span>
+      <span>The Netherlands</span>
+    </div>
+  </footer>
+</body>
+</html>
