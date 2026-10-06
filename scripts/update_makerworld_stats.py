@@ -13,6 +13,7 @@ keeps showing the last good numbers.
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from datetime import datetime, timezone
@@ -40,6 +41,18 @@ PRINT_KEYS = ("printCount", "print_count", "prints")
 TITLE_KEYS = ("title", "name")
 
 
+def report(message: str) -> None:
+    """Print a message and, inside GitHub Actions, attach it to the run.
+
+    Annotations (the ::notice:: lines) show on the run's summary page, so the
+    result is visible without opening the full log.
+    """
+    print(message)
+    if os.environ.get("GITHUB_ACTIONS"):
+        escaped = message.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+        print(f"::notice title=MakerWorld stats::{escaped}")
+
+
 def fetch(url: str) -> str:
     """Return the page HTML.
 
@@ -51,18 +64,20 @@ def fetch(url: str) -> str:
         from curl_cffi import requests as cffi
 
         resp = cffi.get(url, headers=HEADERS, impersonate="chrome", timeout=30)
-        print(f"curl_cffi: HTTP {resp.status_code}, {len(resp.text)} chars")
+        report(f"curl_cffi: HTTP {resp.status_code}, {len(resp.text)} chars")
         if resp.status_code == 200:
             return resp.text
     except ImportError:
-        print("curl_cffi not installed; using urllib")
+        report("curl_cffi not installed; using urllib")
+    except Exception as e:  # network errors: fall through to urllib
+        report(f"curl_cffi failed: {e!r}")
 
     import urllib.request
 
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, timeout=30) as resp:
         body = resp.read().decode("utf-8", "replace")
-        print(f"urllib: HTTP {resp.status}, {len(body)} chars")
+        report(f"urllib: HTTP {resp.status}, {len(body)} chars")
         return body
 
 
@@ -137,30 +152,39 @@ def extract_json_blobs(html: str) -> list:
 
 
 def describe_page(html: str) -> None:
-    """Print clues for debugging when nothing could be extracted."""
+    """Report clues for debugging when nothing could be extracted."""
     title = re.search(r"<title>(.*?)</title>", html, re.S)
-    print("Page title:", title.group(1).strip() if title else "(none)")
-    print("Has __NEXT_DATA__:", "__NEXT_DATA__" in html)
-    print("Has __next_f:", "__next_f" in html)
-    print("Looks like a bot challenge:", any(
-        s in html for s in ("cf-chl", "challenge-platform", "Just a moment")
-    ))
+    lines = [
+        "Page title: " + (title.group(1).strip() if title else "(none)"),
+        f"Has __NEXT_DATA__: {'__NEXT_DATA__' in html}",
+        f"Has __next_f: {'__next_f' in html}",
+        "Looks like a bot challenge: " + str(any(
+            s in html for s in ("cf-chl", "challenge-platform", "Just a moment")
+        )),
+    ]
     for key in DOWNLOAD_KEYS + PRINT_KEYS:
-        print(f"Occurrences of '{key}':", html.count(key))
-    m = re.search(r".{0,300}downloadCount.{0,300}", html, re.S)
+        lines.append(f"Occurrences of '{key}': {html.count(key)}")
+    report("\n".join(lines))
+    m = re.search(r".{0,400}downloadCount.{0,400}", html, re.S)
     if m:
-        print("Context around downloadCount:\n", m.group(0))
+        report("Context around downloadCount: " + m.group(0))
+    else:
+        report("Start of page: " + html[:1500])
 
 
 def main() -> int:
-    html = fetch(PROFILE_URL)
+    try:
+        html = fetch(PROFILE_URL)
+    except Exception as e:
+        report(f"ERROR: could not load {PROFILE_URL}: {e!r}")
+        return 1
 
     designs: dict[str, dict] = {}
     for blob in extract_json_blobs(html):
         find_designs(blob, designs)
 
     if not designs:
-        print("ERROR: no model data found on the page.")
+        report("ERROR: no model data found on the page.")
         describe_page(html)
         return 1
 
@@ -179,11 +203,11 @@ def main() -> int:
         old = json.loads(OUT_PATH.read_text())
         keys = ("models", "downloads", "prints", "per_model")
         if all(old.get(k) == stats[k] for k in keys):
-            print("No change in stats.")
+            report("No change in stats.")
             return 0
 
     OUT_PATH.write_text(json.dumps(stats, indent=2, ensure_ascii=False) + "\n")
-    print(
+    report(
         f"Wrote {OUT_PATH.name}: {stats['models']} models, "
         f"{stats['downloads']} downloads, {stats['prints']} prints"
     )
