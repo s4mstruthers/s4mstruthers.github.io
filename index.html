@@ -10,7 +10,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://s4mstruthers.github.io/">
   <meta property="og:image" content="https://s4mstruthers.github.io/headshot.jpg">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232a282b'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23d39a78'%3ESS%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f2b3d'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23d39a78'%3ESS%3C/text%3E%3C/svg%3E">
 
   <!-- Fonts: a serif for headings, a clean sans for body text, a mono for small labels -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,14 +20,14 @@
   <style>
     /* ---------- Colour tokens (light) ---------- */
     :root {
-      --bg: #f5f3f0;
+      --bg: #f3f4f5;
       --surface: #ffffff;
-      --ink: #1c1b1d;
-      --muted: #5f5b5c;
-      --line: #e4e0dc;
+      --ink: #18212e;
+      --muted: #566273;
+      --line: #dfe2e6;
       --accent: #8c5134;
       --accent-soft: #f3e8e1;
-      --hero-ring: #3c3a3d;
+      --hero-ring: #48576b;
       --serif: "Newsreader", Georgia, serif;
       --sans: "Inter", system-ui, -apple-system, sans-serif;
       --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
@@ -35,19 +35,19 @@
     /* ---------- Colour tokens (dark, follows the visitor's system setting) ---------- */
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
-        --bg: #1a191b;
-        --surface: #232224;
-        --ink: #ece9e7;
-        --muted: #a8a3a1;
-        --line: #333134;
+        --bg: #131a24;
+        --surface: #1b2431;
+        --ink: #e8ebef;
+        --muted: #a0aab8;
+        --line: #2a3546;
         --accent: #d39a78;
         --accent-soft: #3a2a22;
-        --hero-ring: #d39a78;
+        --hero-ring: #7d93b0;
       }
     }
     :root[data-theme="dark"] {
-      --bg: #1a191b; --surface: #232224; --ink: #ece9e7; --muted: #a8a3a1;
-      --line: #333134; --accent: #d39a78; --accent-soft: #3a2a22; --hero-ring: #d39a78;
+      --bg: #131a24; --surface: #1b2431; --ink: #e8ebef; --muted: #a0aab8;
+      --line: #2a3546; --accent: #d39a78; --accent-soft: #3a2a22; --hero-ring: #7d93b0;
     }
 
     /* ---------- Base ---------- */
@@ -99,7 +99,7 @@
     .portrait img {
       width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block;
       border-radius: 28px;
-      box-shadow: 0 30px 60px -30px rgba(40, 38, 41, .55);
+      box-shadow: 0 30px 60px -30px rgba(31, 43, 61, .55);
     }
     .portrait::after {   /* offset outline behind the photo */
       content: ""; position: absolute; inset: 14px -14px -14px 14px;
